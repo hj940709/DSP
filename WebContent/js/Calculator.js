@@ -162,7 +162,7 @@ function getSin(x,caching){
 function getSinTable(caching){
 	var sin = [];
 	var step = submitSimCal(Math.PI.toString(),"40","/",caching);
-	for(var x=-Math.PI;x<=Math.PI;){
+	for(var x=-Math.PI;x<=3.142;){
 		var sinx = getSin(x.toString(),caching);
 		sin.push([x,sinx]);
 		x = Number.parseFloat(submitSimCal(x.toString(),step,"%2B",caching))//x+=step

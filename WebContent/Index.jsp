@@ -52,7 +52,7 @@
 					</h3>
 					<ul class="nav nav-tabs">
 						<li class="active">
-							<a href="./Index.html">Simple Calculator</a>
+							<a href="./Index.jsp">Simple Calculator</a>
 						</li>
 						<li>
 							<a href="./Step1.html">Step 1</a>
