@@ -1,5 +1,4 @@
 function calculate(){
-	var sin = getSinTable(true);
 	var outputhtml = "";
 	//var equation = $("#equation").val();
 	var equation = document.getElementById("equation").value.toLocaleLowerCase();
@@ -46,6 +45,7 @@ function calculate(){
 		var coefficient = "1";
 		if (substract(result)[0]!="sin(x)")
 			coefficient = substract(result)[0];
+		var sin = getSinTable(true);
 		var data = [];
 		for(var i=0;i<sin.length;i++){
 			m = submitSimCal(coefficient,sin[i][1].toString(),"*",true);
