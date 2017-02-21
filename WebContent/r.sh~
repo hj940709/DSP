@@ -1,3 +1,0 @@
-#! /bin/bash
-
-Rscript -e 'jpeg("./Rplot.jpeg");plot('$1','$2',main="y='$3'",xlab="X",ylab="Y",type="l");dev.off();'
