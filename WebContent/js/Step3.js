@@ -43,7 +43,7 @@ function calculate(){
 		document.getElementById("output").innerHTML = outputhtml;
 	}
 	else{
-		var coefficient = 1;
+		var coefficient = "1";
 		if (substract(result)[0]!="sin(x)")
 			coefficient = substract(result)[0];
 		var data = [];
