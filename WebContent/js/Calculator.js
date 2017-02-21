@@ -117,3 +117,55 @@ function simplify(arg1,arg2,op){
 	}
 	return null;
 }
+
+function factorial(n,caching){
+	//factorial(n)
+	var result = "1";
+	for(var i=1;i<=n;i++)
+		result = submitSimCal(result,i.toString(),"*",caching);
+	return result;
+}
+
+function power(x,n,caching){
+	//x^n->power(x,n)
+	var result = x.toString();
+	if(n==0) return "1";
+	for(var i=1;i<n;i++)
+		result = submitSimCal(result,x.toString(),"*",caching);
+	return result;
+}
+
+function getSin(x,caching){
+	//Approximately,
+	//sin(x)=
+	// power(-1,0)/factorial(1)*power(x,1)+
+	// power(-1,1)/factorial(3)*power(x,3)+
+	// ...power(-1,n)/factorial(2n+1)*power(x,2n+1)
+	var result = "0";
+	for(var n=0;n<7;n++){
+		var a = power("-1",n,caching);//power(-1,n)
+		var b = submitSimCal("2",n.toString(),"*",caching);//2n
+		b = submitSimCal(b,"1","%2B",caching); //2n+1
+		b = Number.parseFloat(b);
+		var c = factorial(b,caching); //factorial(2n+1)
+		var d = power(x,b,caching); //power(x,2n+1)
+		//power(-1,n)/factorial(2n+1)
+		var temp = submitSimCal(a,c,"/",caching); 
+		//power(-1,n)/factorial(2n+1)*power(x,2n+1)
+		temp = submitSimCal(temp,d,"*",caching); 
+		//sum(power(-1,n)/factorial(2n+1)*power(x,2n+1))
+		result = submitSimCal(result,temp,"%2B",caching);
+	}
+	return result;
+}
+
+function getSinTable(caching){
+	var sin = [];
+	var step = submitSimCal(Math.PI.toString(),"40","/",caching);
+	for(var x=-Math.PI;x<=Math.PI;){
+		var sinx = getSin(x.toString(),caching);
+		sin.push([x,sinx]);
+		x = Number.parseFloat(submitSimCal(x.toString(),step,"%2B",caching))//x+=step
+	}
+	return sin;
+}
