@@ -3,11 +3,15 @@ package com.hj;
 public class SinParser {
 	private double coefficient;
 	public SinParser(String equation){
-		String str_coefficient = this.parse(equation.split("sin")[0]);
-		if(str_coefficient.endsWith("*")){
-			str_coefficient = 
-					str_coefficient.substring(0, str_coefficient.length()-1);
+		String str_coefficient = equation.split("sin")[0];
+		if(!str_coefficient.isEmpty()){
+			str_coefficient = this.parse(equation.split("sin")[0]);
+			if(str_coefficient.endsWith("*")){
+				str_coefficient = 
+						str_coefficient.substring(0, str_coefficient.length()-1);
+			}
 		}
+		else str_coefficient = "1";
 		this.coefficient = Double.valueOf(str_coefficient);
 	}
 	public String getCoefficient() {
