@@ -1,8 +1,10 @@
 function plotInCanvas(data,str){
-	//data<-json object
-	//str<- line
+	//data<-two dimensional array [[x,y]]
+	//str<- equation: a*sin(x) or sin(x)
 	//min-height:300px
 	//min-width:360px
+	//high resolution is strongly recommended
+	//display with too small size will let line go out of boundary
 	var container = $("#plot");
 	var canvas = container.children("canvas")[0];
 	//self-adaptive
