@@ -2,6 +2,15 @@ function calculate(){
 	var outputhtml = "";
 	//var equation = $("#equation").val();
 	var equation = document.getElementById("equation").value.toLocaleLowerCase();
+	var plot = false; //decide whether it eventually will plot or calculate
+	if(equation.endsWith("*sin(x)")){
+		equation = equation.substr(0,equation.length-7);
+		plot = true;
+	}
+	if(equation=="sin(x)"){
+		equation = "1"; //sin(x)=1*sin(x)
+		plot = true;
+	}
 	//check for cached item recursively
 	var simplified = replace(equation);
 	var flag = simplified;
@@ -11,18 +20,13 @@ function calculate(){
 	}
 	//submit
 	var array = resolve(simplified);
-	var result = "";
+	var result = array[0];
 	while(array[2]!=""){
 		var arg1 = array[0];
 		var op = array[1];
 		var temp = resolve(array[2]);
 		var arg2 = temp[0];
 		if(op=="+") op="%2B";
-		//stop operating when meet sin
-		if(arg2=="sin(x)"){
-			result = arg1+op+arg2;
-			break;
-		}
 		
 		result = submitSimCal(arg1,arg2,op,false);
 		//Adding output node
@@ -40,7 +44,7 @@ function calculate(){
 		
 		array = resolve(simplified);
 	}
-	if(result.search(/sin\(x\)/)==-1){
+	if(!plot){
 		//Show the result for non-sin expression
 		alert(equation+"="+result);
 		//Logging to the history
@@ -59,19 +63,16 @@ function calculate(){
 	}
 	else{
 		//plot for the expression with sin
-		var coefficient = "1"; //default coefficient 1
-		if (resolve(result)[0]!="sin(x)")
-			coefficient = resolve(result)[0]; //set coefficient
 		var sin = getSinTable(true); //get sin table
 		var data = [];
 		for(var i=0;i<sin.length;i++){
 			//get coordinate for plot
-			m = submitSimCal(coefficient,sin[i][1].toString(),"*",true);
+			m = submitSimCal(result,sin[i][1].toString(),"*",true);
 			data.push([sin[i][0],m]);
 		}
 		$("#plot").height(9*$("#plot").width()/16);
 		$("#plot").html("<canvas/>");
-		plotInCanvas(data,"y="+equation);
+		plotInCanvas(data,"y="+equation+"*sin(x)");
 	}
 	//Reset the form
 	//$("#equation").val("");
@@ -94,7 +95,7 @@ function replace(equation){
 	var arg1 = main[0];
 	var op = main[1];
 	var simplified = "";
-	if(main[2]=="") simplified=equation;
+	if(main[2]=="") return equation; //a single number
 	while(main[2]!=""){
 		var secondary = resolve(main[2]);
 		var arg2 = secondary[0];
