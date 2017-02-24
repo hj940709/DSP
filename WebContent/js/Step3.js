@@ -28,7 +28,7 @@ function calculate(){
 		var arg2 = temp[0];
 		if(op=="+") op="%2B";
 		
-		result = submitSimCal(arg1,arg2,op,false);
+		result = submitSimCal(arg1,arg2,op,true);
 		//Adding output node
 		outputhtml += "<tr><td>"+arg1+array[1]+arg2+" = "+result+"</td></tr>";
 		//break when getting infinity
