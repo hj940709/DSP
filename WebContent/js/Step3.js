@@ -65,7 +65,7 @@ function calculate(){
 		//plot for the expression with sin
 		var sin = getSinTable(true); //get sin table
 		var data = [];
-		if(result="Infinity") result="9999" //set an upper bound for infinity
+		if(result=="Infinity") result="9999" //set an upper bound for infinity
 		for(var i=0;i<sin.length;i++){
 			//get coordinate for plot
 			m = submitSimCal(result,sin[i][1].toString(),"*",true);
