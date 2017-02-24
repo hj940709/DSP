@@ -2,20 +2,22 @@ function calculate(){
 	var outputhtml = "";
 	//var equation = $("#equation").val();
 	var equation = document.getElementById("equation").value;
-	var array = substract(equation);
+	//parse the equation
+	var main = resolve(equation);
 	var result = "";
-	while(array[2]!=""){
-		var arg1 = array[0];
-		var op = array[1];
-		var temp = substract(array[2]);
-		var arg2 = temp[0];
+	while(main[2]!=""){
+		var arg1 = main[0];
+		var op = main[1];
+		var secondary = resolve(main[2]);
+		var arg2 = secondary[0];
 		if(op=="+") op="%2B";
-		result = submitSimCal(arg1,arg2,op,false,false);
+		result = submitSimCal(arg1,arg2,op,false);
 		//Adding output node
-		outputhtml += "<tr><td>"+arg1+array[1]+arg2+" = "+result+"</td></tr>";
+		outputhtml += "<tr><td>"+arg1+main[1]+arg2+" = "+result+"</td></tr>";
+		
 		if(result == "Infinity") break;
-		//if(result="Error")
-		array = substract(result+temp[1]+temp[2]);
+		
+		main = resolve(result+secondary[1]+secondary[2]);
 	}
 	//Show the result
 	alert(equation+"="+result);

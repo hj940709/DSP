@@ -1,7 +1,7 @@
 window.onload=function(){
-	//initial local storage for cache and history if they are null
 	if(sessionStorage.cacheSize==null)
 		sessionStorage.cacheSize=10;//Cache size is 10 by default
+	//initial local storage for cache and history if they are null
 	if(sessionStorage.cache==null)
 		sessionStorage.cache=JSON.stringify([]);
 	if(sessionStorage.history==null)
@@ -17,11 +17,15 @@ window.onload=function(){
 		if(document.getElementById("history")!=null)
 			document.getElementById("history").innerHTML = html;
 	}
+	
 	if(document.getElementById("cachesize")!=null)
+		//set cache size input field
 		document.getElementById("cachesize").value = sessionStorage.cacheSize;
 }
-function httpGet(url,data)
-{
+
+function httpGet(url,data){
+	//connect the server and pass operation
+	//data:arg1,arg2,op
 	var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", url+"?"+data, false ); 
     xmlHttp.send( null );
@@ -30,12 +34,16 @@ function httpGet(url,data)
 
 
 function submitSimCal(arg1,arg2,op,caching){
-	//atomic submittion, caching and returning result;
+	//atomic operation, caching and returning result
+	//caching: switch for caching and returning result automatically
 	var result = null;
+	//automatically check for cached result and return
 	if(caching){
+		
 		result = simplify(arg1,arg2,op);
 	}
 	if(result!=null) return result;
+	
 	var data = "arg1="+arg1+"&arg2="+arg2+"&op="+op;
 	
 	//submit atomic operation to server
@@ -51,7 +59,7 @@ function submitSimCal(arg1,arg2,op,caching){
 		});*/
 	result = httpGet("./SimCalServlet",data)["result"];
 	if(caching){
-		//caching returned result
+		//automatically caching returned result
 		var cache = JSON.parse(sessionStorage.cache);
 		var t_op = op;
 		if(t_op == "%2B") t_op = "+";
@@ -66,6 +74,7 @@ function submitSimCal(arg1,arg2,op,caching){
 }
 
 function localCal(arg1,arg2,op){
+	//local simple calculator
 	var n_arg1 = Number.parseFloat(arg1);
 	var n_arg2 = Number.parseFloat(arg2);
 	switch(op){
@@ -88,7 +97,7 @@ function localCal(arg1,arg2,op){
 	}
 }
 
-function substract(str){
+function resolve(str){
 	//separate the first number from string
 	//separate the first operation from string
 	//return number, operation and remaining
@@ -104,6 +113,7 @@ function substract(str){
 }
 
 function simplify(arg1,arg2,op){
+	//return cached item result
 	var cache = JSON.parse(sessionStorage.cache);
 	var t_arg1 = arg1;
 	var t_arg2 = arg2;
@@ -120,6 +130,7 @@ function simplify(arg1,arg2,op){
 
 function factorial(n,caching){
 	//factorial(n)
+	//n!
 	var result = "1";
 	for(var i=1;i<=n;i++)
 		result = submitSimCal(result,i.toString(),"*",caching);
@@ -127,7 +138,8 @@ function factorial(n,caching){
 }
 
 function power(x,n,caching){
-	//x^n->power(x,n)
+	//power(x,n)
+	//x^n
 	var result = x.toString();
 	if(n==0) return "1";
 	for(var i=1;i<n;i++)
@@ -160,7 +172,10 @@ function getSin(x,caching){
 }
 
 function getSinTable(caching){
+	//return the sin table
+	//every item in the table is one point for sin(x)
 	var sin = [];
+	//step size: pi/40 (0.0785398163397)
 	var step = submitSimCal(Math.PI.toString(),"40","/",caching);
 	for(var x=-Math.PI;x<=3.142;){
 		var sinx = getSin(x.toString(),caching);
