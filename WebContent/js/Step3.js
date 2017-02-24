@@ -19,30 +19,30 @@ function calculate(){
 		simplified = replace(simplified);
 	}
 	//submit
-	var array = resolve(simplified);
-	var result = array[0];
-	while(array[2]!=""){
-		var arg1 = array[0];
-		var op = array[1];
-		var temp = resolve(array[2]);
-		var arg2 = temp[0];
+	var main = resolve(simplified);
+	var result = main[0];
+	while(main[2]!=""){
+		var arg1 = main[0];
+		var op = main[1];
+		var secondary = resolve(main[2]);
+		var arg2 = secondary[0];
 		if(op=="+") op="%2B";
 		
 		result = submitSimCal(arg1,arg2,op,true);
 		//Adding output node
-		outputhtml += "<tr><td>"+arg1+array[1]+arg2+" = "+result+"</td></tr>";
+		outputhtml += "<tr><td>"+arg1+main[1]+arg2+" = "+result+"</td></tr>";
 		//break when getting infinity
 		if(result == "Infinity") break;
 		
 		//check for cached item again
-		simplified = replace(result+temp[1]+temp[2]);
+		simplified = replace(result+secondary[1]+secondary[2]);
 		flag = simplified;
 		while(flag!=simplified){
 			flag = simplified;
 			simplified = replace(simplified);
 		}
 		
-		array = resolve(simplified);
+		main = resolve(simplified);
 	}
 	if(!plot){
 		//Show the result for non-sin expression
