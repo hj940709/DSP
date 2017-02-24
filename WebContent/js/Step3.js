@@ -72,7 +72,7 @@ function calculate(){
 		}
 		$("#plot").height(9*$("#plot").width()/16);
 		$("#plot").html("<canvas/>");
-		plotInCanvas(data,"y="+equation+"*sin(x)");
+		plotInCanvas(data,"y="+document.getElementById("equation").value);
 	}
 	//Reset the form
 	//$("#equation").val("");
