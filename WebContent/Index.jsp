@@ -81,7 +81,7 @@
 									</select>
 									<input type="number" class="form-control" name="arg2" placeHolder="arg2"/>
 									<button type="submit" class="btn btn-primary" >Calculate</button>
-								</div>
+								</form>
 							</div>
 						</div>
 						<div class="span12">
