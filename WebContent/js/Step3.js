@@ -92,7 +92,6 @@ function getSimplified(){
 function replace(equation){
 	//scan and replace
 	//from left to right
-	var flag = false;
 	var main = resolve(equation);
 	var arg1 = main[0];
 	var op = main[1];
