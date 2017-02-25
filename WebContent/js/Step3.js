@@ -2,7 +2,8 @@ function calculate(){
 	var outputhtml = "";
 	//var equation = $("#equation").val();
 	var equation = document.getElementById("equation").value.toLocaleLowerCase();
-	var plot = false; //decide whether it eventually will plot or calculate
+	var display = false //decide whether it eventually should display calculation
+	var plot = false; //decide whether it eventually should plot
 	if(equation.endsWith("*sin(x)")){
 		equation = equation.substr(0,equation.length-7);
 		plot = true;
@@ -13,15 +14,17 @@ function calculate(){
 	}
 	//check for cached item recursively
 	var simplified = replace(equation);
-	var flag = simplified;
+	var flag = equation;
 	while(flag!=simplified){
 		flag = simplified;
 		simplified = replace(simplified);
+		display = true;
 	}
 	//submit
 	var main = resolve(simplified);
 	var result = main[0];
 	while(main[2]!=""){
+		display = true;
 		var arg1 = main[0];
 		var op = main[1];
 		var secondary = resolve(main[2]);
@@ -44,7 +47,7 @@ function calculate(){
 		
 		main = resolve(simplified);
 	}
-	if(!plot){
+	if(display){
 		//Show the result for non-sin expression
 		alert(equation+"="+result);
 		//Logging to the history
@@ -61,15 +64,13 @@ function calculate(){
 		//Re-display output list
 		document.getElementById("output").innerHTML = outputhtml;
 	}
-	else{
+	if(plot){
 		//plot for the expression with sin
-		var sin = getSinTable(true); //get sin table
-		var data = [];
+		var data = getSinTable(true); //get sin table
 		if(result=="Infinity") result="9999" //set an upper bound for infinity
-		for(var i=0;i<sin.length;i++){
+		for(var i=0;i<data.length;i++){
 			//get coordinate for plot
-			m = submitSimCal(result,sin[i][1].toString(),"*",true);
-			data.push([sin[i][0],m]);
+			data[i][1] = submitSimCal(result,data[i][1],"*",false);
 		}
 		$("#plot").height(9*$("#plot").width()/16);
 		$("#plot").html("<canvas/>");

@@ -66,8 +66,6 @@ function client(){
 
 function hybrid(){
 	//approximation table of 1*sin(x) from -pi to pi with step size pi/40(0.0785398163397)
-	//format : [x,sin(x)]
-	var sin = getSinTable(false);
 	var equation = $("#equation").val().toLocaleLowerCase();
 	//add canvas label
 	$("#plot").html("<canvas/>");
@@ -89,11 +87,12 @@ function hybrid(){
 		
 		main = resolve(result+secondray[1]+secondray[2]);
 	}
-	var data = [];
 	if(result=="sin(x)") result = "1";
-	for(var i=0;i<sin.length;i++){
-		m = submitSimCal(result,sin[i][1],"*",false);
-		data.push([sin[i][0],m]);
-	}	
+	//format : [x,sin(x)]
+	var data = getSinTable(false);
+	for(var i=0;i<data.length;i++){
+		//get coordinate for plot
+		data[i][1] = submitSimCal(result,data[i][1],"*",false);
+	}
 	plotInCanvas(data,"y="+equation);
 }
