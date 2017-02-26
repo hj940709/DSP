@@ -2,6 +2,8 @@ package com.hj;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,22 +32,25 @@ public class PlotServlet extends HttpServlet {
 			//Plotting to a jpeg figure
 			String os = System.getProperties().getProperty("os.name");
 			os = os.split(" ")[0];
+			long id = new Date().getTime();
 			switch(os){
 			case "Windows":
 				path = path.replace("\\", "/");
-				new ProcessBuilder("Rscript","-e","\"jpeg('"+path+"Rplot.jpeg"+"');"
+				new ProcessBuilder("Rscript","-e","\"jpeg('"+path+"Rplot"+id+".jpeg"+"');"
 						+ "plot(seq(-pi,pi,pi/40),"+coefficient+"*sin(seq(-pi,pi,pi/40))"+
 						",main='y="+equation+"',xlab='X',ylab='Y',type='l');\"").start().waitFor();
 				break;
 				
 			case "Linux":
-				new ProcessBuilder(path+"r.sh",	path+"Rplot.jpeg",coefficient,equation).start().waitFor();
+				new ProcessBuilder(path+"r.sh",	path+"Rplot"+id+".jpeg",coefficient,equation).start().waitFor();
 				break;
 			}
 			//Output and send the figure to client
-			ImageIO.write(ImageIO.read(new File(path+"Rplot.jpeg")),
+			File image = new File(path+"Rplot"+id+".jpeg");
+			ImageIO.write(ImageIO.read(image),
 					"jpeg", response.getOutputStream());
 			response.flushBuffer();
+			image.delete();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
